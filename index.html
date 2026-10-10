@@ -4,91 +4,98 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="An interactive task manager with filtering and local storage.">
-  <title>TaskFlow | Smart To-Do List</title>
-  <link rel="stylesheet" href="todo.css">
-  <script src="todo.js" defer></script>
+  <meta name="description" content="Live weather dashboard with city search, temperature, humidity and wind speed.">
+  <title>Atmos | Weather Dashboard</title>
+  <link rel="stylesheet" href="weather.css">
+  <script src="weather.js" defer></script>
 </head>
 <body>
   <header class="topbar">
-    <a href="index.html" class="brand">Task<span>Flow.</span></a>
-    <a href="index.html" class="back-link">← Portfolio</a>
+    <a class="brand" href="index.html">atmos<span>.</span></a>
+    <a class="back-link" href="index.html">← Portfolio</a>
   </header>
 
-  <main class="app">
-    <section class="welcome">
-      <span class="eyebrow">YOUR PERSONAL WORKSPACE</span>
-      <h1>Make today <span>count.</span></h1>
-      <p>Plan your tasks, track your progress, and get things done.</p>
+  <main class="dashboard">
+    <section class="intro">
+      <span class="eyebrow">YOUR WEATHER, AT A GLANCE</span>
+      <h1>Weather <span>Dashboard</span></h1>
+      <p>Discover current weather conditions anywhere in the world.</p>
     </section>
 
-    <section class="summary" aria-label="Task summary">
-      <article class="stat-card">
-        <span>Total Tasks</span>
-        <strong id="totalCount">0</strong>
-      </article>
-      <article class="stat-card">
-        <span>Active</span>
-        <strong id="activeCount">0</strong>
-      </article>
-      <article class="stat-card">
-        <span>Completed</span>
-        <strong id="completedCount">0</strong>
-      </article>
-    </section>
+    <form id="searchForm" class="search-form">
+      <label class="sr-only" for="cityInput">Search for a city</label>
+      <input id="cityInput" type="search"
+        placeholder="Enter a city, e.g. Tirupati"
+        maxlength="100" required>
+      <button id="searchButton" type="submit">Search ↗</button>
+    </form>
 
-    <section class="task-panel" aria-labelledby="task-heading">
-      <h2 id="task-heading">My Tasks</h2>
-
-      <form id="taskForm" class="task-form">
-        <label class="sr-only" for="taskInput">New task</label>
-        <input
-          id="taskInput"
-          type="text"
-          maxlength="150"
-          placeholder="What do you need to do?"
-          autocomplete="off"
-          required
-        >
-        <button type="submit" class="add-button">+ Add Task</button>
-      </form>
-
-      <div class="toolbar">
-        <div class="filters" role="group" aria-label="Filter tasks">
-          <button type="button" class="filter active" data-filter="all" aria-pressed="true">All</button>
-          <button type="button" class="filter" data-filter="active" aria-pressed="false">Active</button>
-          <button type="button" class="filter" data-filter="completed" aria-pressed="false">Completed</button>
-        </div>
-
-        <button type="button" id="clearCompleted" class="clear-button">
-          Clear completed
-        </button>
-      </div>
-
-      <p id="taskMessage" class="message" role="status" aria-live="polite"></p>
-      <ul id="taskList" class="task-list" aria-label="Your tasks"></ul>
-
-      <div id="emptyState" class="empty-state">
-        <div aria-hidden="true" class="empty-icon">✦</div>
-        <h3>No tasks here yet</h3>
-        <p>Add a task above to get started.</p>
-      </div>
-
-      <div class="panel-footer">
-        <span id="remainingText">0 tasks remaining</span>
-        <button type="button" id="deleteAll" class="delete-all">
-          Delete all tasks
-        </button>
-      </div>
-    </section>
-
-    <p class="privacy-note">
-      🔒 Your tasks are saved locally in this browser.
+    <p id="status" role="status" aria-live="polite">
+      Search for a city to see its weather.
     </p>
+
+    <section id="weatherPanel" class="weather-panel" hidden
+      aria-label="Current weather">
+      <div class="weather-hero">
+        <div>
+          <span class="eyebrow">CURRENT CONDITIONS</span>
+          <h2 id="cityName">--</h2>
+          <p id="weatherDescription">--</p>
+          <p id="updatedAt" class="updated"></p>
+        </div>
+        <div class="temperature-block">
+          <span id="weatherIcon" class="weather-icon" aria-hidden="true">🌤️</span>
+          <p><strong id="temperature">--</strong><span>°C</span></p>
+          <span id="feelsLike">Feels like --°C</span>
+        </div>
+      </div>
+
+      <div class="metrics-grid">
+        <article class="metric-card">
+          <span class="metric-icon" aria-hidden="true">💧</span>
+          <p>Humidity</p>
+          <strong id="humidity">--%</strong>
+          <small>Relative humidity</small>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-icon" aria-hidden="true">💨</span>
+          <p>Wind Speed</p>
+          <strong id="windSpeed">-- km/h</strong>
+          <small>Near-surface wind</small>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-icon" aria-hidden="true">🌡️</span>
+          <p>Feels Like</p>
+          <strong id="feelsMetric">--°C</strong>
+          <small>Apparent temperature</small>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-icon" aria-hidden="true">🌧️</span>
+          <p>Precipitation</p>
+          <strong id="precipitation">-- mm</strong>
+          <small>Current precipitation</small>
+        </article>
+      </div>
+    </section>
+
+    <section class="info-card">
+      <h2>About this dashboard</h2>
+      <p>
+        This project demonstrates asynchronous JavaScript using
+        Fetch API, async/await, REST API responses, JSON parsing,
+        city search, and error handling.
+      </p>
+      <p class="source-note">
+        Weather data provided by Open-Meteo.
+      </p>
+    </section>
   </main>
 
   <footer>
-    Built with HTML, CSS and JavaScript · TaskFlow
+    Built with HTML, CSS and JavaScript · Atmos Weather
   </footer>
 </body>
 </html>
