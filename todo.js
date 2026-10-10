@@ -43,19 +43,19 @@ function saveTasks() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
     return true;
-  } catch {
-    showMessage("Unable to save tasks in this browser.", true);
+  } catch (error) {
+    showMessage("Could not save tasks in this browser.", true);
     return false;
   }
 }
 
 function showMessage(text, isError = false) {
   message.textContent = text;
-  message.style.color = isError ? "#b33d59" : "#159b70";
+  message.style.color = isError ? "#b42340" : "";
 }
 
 function createId() {
-  if (window.crypto && crypto.randomUUID) {
+  if (window.crypto && typeof crypto.randomUUID === "function") {
     return crypto.randomUUID();
   }
 
@@ -66,7 +66,7 @@ function createId() {
 function addTask(text) {
   tasks.unshift({
     id: createId(),
-    text,
+    text: text.slice(0, 150),
     completed: false
   });
 
@@ -131,7 +131,10 @@ function getVisibleTasks() {
 function createTaskElement(task) {
   const item = document.createElement("li");
   item.className = "task-item";
-  if (task.completed) item.classList.add("completed");
+
+  if (task.completed) {
+    item.classList.add("completed");
+  }
 
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
@@ -184,7 +187,7 @@ function render() {
     list.appendChild(createTaskElement(task));
   });
 
-  emptyState.hidden = visibleTasks.length !== 0;
+  emptyState.hidden = visibleTasks.length > 0;
 
   if (tasks.length === 0) {
     emptyState.querySelector("h3").textContent = "No tasks yet";
@@ -208,7 +211,7 @@ form.addEventListener("submit", event => {
     return;
   }
 
-  addTask(text.slice(0, 150));
+  addTask(text);
   input.value = "";
   input.focus();
 });
